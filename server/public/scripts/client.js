@@ -1,23 +1,20 @@
 $( document ).ready( onReady );
 
 let currentEquation = {
-    num0: null,
-    num1: null,
-    operator: null
+    num0: '',
+    num1: '',
+    operator: ''
 }
 
 function clearInputs(){
-    $( '#num0In' ).val( '' );
-    $( '#num1In' ).val( '' );
-    currentEquation.num0 = null;
-    currentEquation.num1 = null;
-    currentEquation.operator = null;
+    currentEquation.num0 = '';
+    currentEquation.num1 = '';
+    currentEquation.operator = '';
+    $( '#calculatorOut' ).val( '0' );
 }
 
 function doMath(){
     // get user inputs for num0 & num 1 & put in currentEquation
-    currentEquation.num0 = $( '#num0In' ).val();
-    currentEquation.num1 = $( '#num1In' ).val();
     console.log( 'currentEquation:', currentEquation );
     // send to server via POST
     $.ajax({
@@ -27,9 +24,11 @@ function doMath(){
     }).then( function( response ){
         console.log( 'back from calculate POST with:', response );
         // display answer on DOM
-        $( '#answerOut' ).empty();
-        $( '#answerOut' ).append( response.answer );
+        $( '#calculatorOut' ).val(response.answer);
         // update history
+        currentEquation.num0 = '';
+        currentEquation.num1 = '';
+        currentEquation.operator = '';
         getHistory();
     })
 }
@@ -56,9 +55,26 @@ function onReady(){
     $( '#clearInputsButton' ).on( 'click', clearInputs );
     $( '#equalsButton' ).on( 'click', doMath );
     $( '.setOperationButton' ).on( 'click', setOperation );
+    $( '.setNumberButton' ).on( 'click', setNumber );
+}
+
+function setNumber(){
+    console.log( 'in setNumber' );
+    if( currentEquation.operator === '' ){
+        currentEquation.num0 += $( this ).text();
+    }
+    else{
+        currentEquation.num1 += $( this ).text();
+    }
+    updateDisplay();
 }
 
 function setOperation(){
     console.log( 'in setOperation:', $( this ).text() );
     currentEquation.operator = $( this ).text();
+    updateDisplay();
+}
+
+function updateDisplay(){
+    $( '#calculatorOut' ).val( currentEquation.num0 + currentEquation.operator + currentEquation.num1 );
 }
