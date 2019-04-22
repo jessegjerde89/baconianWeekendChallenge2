@@ -19,7 +19,25 @@ app.listen( port, ()=>{
 // routes
 app.post( '/calculate', ( req, res ) =>{
     console.log( '/calculate POST hit:', req.body );
-    res.send( 'meow' );
+    let answer;
+    if( req.body.operator === '-'){
+        answer = req.body.num0 - req.body.num1;
+    }
+    else if( req.body.operator === '*'){
+        console.log( 'multiplication' )
+        answer = req.body.num0 * req.body.num1;
+    }
+    else if( req.body.operator === '/'){
+        console.log( 'division' )
+        answer = req.body.num0 / req.body.num1;
+    }
+    else{
+        console.log( 'addition' )
+        answer = Number( req.body.num0 ) + Number( req.body.num1 );
+    }
+    console.log( 'answer:', answer );
+    history.push( req.body.num0 + req.body.operator + req.body.num1 + '=' + answer );
+    res.send( { answer: answer } );
 }) // end /calculate POST
 
 app.get( '/history', ( req, res )=>{
