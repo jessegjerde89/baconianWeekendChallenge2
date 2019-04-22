@@ -3,7 +3,7 @@ select type of mathematical operation
 submit, = button is clicked
 bundle it up in an object,
 send this object to the server via a POST
-'C' button that will clear the user input fields.
+- 'C' button that will clear the user input fields.
 
 The server should be able to handle Addition, Subtraction, Multiplication, and Division
 send answer back to the client in an object
